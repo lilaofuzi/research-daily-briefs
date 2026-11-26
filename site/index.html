@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="科研简报的日期归档、主题检索与精选文献索引。网页独立生成版。">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'">
+  <title>科研简报归档馆</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.mjs"></script>
+</head>
+<body>
+  <header class="masthead">
+    <div class="masthead-inner"><p class="eyebrow">RESEARCH DAILY / ARCHIVE</p>
+      <h1>科研简报归档馆</h1>
+      <p class="intro">沿着日期发现研究，让每一份阅读都有迹可循。</p>
+      <div class="edition">网页独立生成版 <span>GitHub Actions · OpenAI API</span></div>
+    </div>
+  </header>
+  <main>
+    <p id="load-status" role="status" aria-live="polite">正在读取归档…</p>
+    <section class="toolbar" aria-label="文献检索">
+      <label class="search-label">搜索归档<input id="search" type="search" placeholder="DOI、论文题名或关键词" autocomplete="off"></label>
+      <label>研究主题<select id="topic"><option value="">全部主题</option><option>Mechanobiology</option><option>LLPS</option><option>核力学</option><option>肿瘤免疫</option><option>基金政策</option></select></label>
+      <button id="reset" type="button">清除筛选</button>
+    </section>
+    <div class="layout">
+      <aside>
+        <section class="panel calendar-panel" aria-label="年月日历">
+          <div class="section-heading"><h2>按日期阅读</h2><button id="today" type="button">本月</button></div>
+          <div class="month-nav"><button id="prev" aria-label="上个月">‹</button>
+            <label class="sr-only" for="year">年份</label><select id="year"></select>
+            <label class="sr-only" for="month">月份</label><select id="month"></select>
+            <button id="next" aria-label="下个月">›</button></div>
+          <div class="weekdays" aria-hidden="true"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+          <div id="calendar" class="calendar"></div>
+          <p class="calendar-help">有底色的日期可阅读。阶段汇总仅列在其归档日，不代表期间每天有简报。</p>
+        </section>
+        <section class="panel status-panel"><h2>归档说明</h2>
+          <p>“原文”指该来源版本的完整文字；“摘要”指历史整理或摘要证据；“阶段汇总”保留覆盖区间。</p>
+          <p>网页独立生成内容与 ChatGPT 原定时任务可能不同，本站未连接该任务的结果。</p>
+          <p id="excel-notice"></p><p id="import-notice"></p>
+          <button id="export" type="button">下载跨日期文献索引</button>
+        </section>
+      </aside>
+      <section class="workspace" aria-label="归档内容">
+        <div id="stats" class="stats"></div>
+        <nav class="view-tabs" aria-label="归档视图">
+          <button id="archive-tab" class="active" aria-pressed="true">日期归档</button>
+          <button id="papers-tab" aria-pressed="false">文献总索引</button>
+          <button id="picks-tab" aria-pressed="false">Editor's Pick</button>
+        </nav>
+        <div id="results" aria-live="polite"></div>
+        <section id="detail" class="detail" aria-live="polite" hidden></section>
+      </section>
+    </div>
+  </main>
+  <footer>可追溯来源 · 保留历史版本 · 不补造历史记录</footer>
+</body>
+</html>

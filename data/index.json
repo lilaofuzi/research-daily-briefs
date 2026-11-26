@@ -1,0 +1,10 @@
+{
+  "briefs": [],
+  "database_status": {
+    "llps_excel": "unavailable",
+    "notice": "云端未连接或读取本地 LLPS Excel 数据库；仅对本站归档 DOI 去重，未声称更新 Excel。"
+  },
+  "historical_import_status": "not_imported",
+  "latest_date": null,
+  "schema_version": 1
+}

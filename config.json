@@ -1,0 +1,9 @@
+{
+  "timezone": "Asia/Shanghai",
+  "model": "gpt-5-mini",
+  "lookback_days": 7,
+  "max_papers": 12,
+  "max_output_tokens": 14000,
+  "policy_domains": ["nsfc.gov.cn", "most.gov.cn", "gov.cn"],
+  "topics": ["Mechanobiology", "LLPS", "核力学", "肿瘤免疫", "基金政策"]
+}

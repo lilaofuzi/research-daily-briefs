@@ -1,0 +1,290 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "type": "string"
+    },
+    "database_status": {
+      "additionalProperties": false,
+      "properties": {
+        "llps_excel": {
+          "const": "unavailable"
+        },
+        "notice": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "llps_excel",
+        "notice"
+      ],
+      "type": "object"
+    },
+    "date": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "generated_at": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "items": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "doi": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "editors_pick": {
+            "type": "boolean"
+          },
+          "evidence_level": {
+            "enum": [
+              "原文",
+              "摘要"
+            ]
+          },
+          "id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "journal": {
+            "type": "string"
+          },
+          "keywords": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "kind": {
+            "enum": [
+              "paper",
+              "policy"
+            ]
+          },
+          "limitations": {
+            "type": "string"
+          },
+          "oa": {
+            "additionalProperties": false,
+            "properties": {
+              "evidence_url": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "status": {
+                "enum": [
+                  "verified",
+                  "unavailable"
+                ]
+              },
+              "url": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "status",
+              "url",
+              "evidence_url"
+            ],
+            "type": "object"
+          },
+          "pick_reason": {
+            "type": "string"
+          },
+          "publication_date": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "publication_date_basis": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "significance": {
+            "type": "string"
+          },
+          "source_url": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "summary": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "topics": {
+            "items": {
+              "enum": [
+                "Mechanobiology",
+                "LLPS",
+                "核力学",
+                "肿瘤免疫",
+                "基金政策"
+              ]
+            },
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "verification": {
+            "additionalProperties": false,
+            "properties": {
+              "checked_at": {
+                "type": "string"
+              },
+              "evidence_quote": {
+                "type": "string"
+              },
+              "evidence_url": {
+                "type": "string"
+              },
+              "fact_check": {
+                "type": "string"
+              },
+              "metadata_url": {
+                "type": "string"
+              },
+              "status": {
+                "enum": [
+                  "automated",
+                  "historical_unverified"
+                ]
+              }
+            },
+            "required": [
+              "status",
+              "checked_at",
+              "metadata_url",
+              "evidence_url",
+              "evidence_quote",
+              "fact_check"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "doi",
+          "title",
+          "journal",
+          "publication_date",
+          "publication_date_basis",
+          "topics",
+          "keywords",
+          "summary",
+          "significance",
+          "limitations",
+          "editors_pick",
+          "pick_reason",
+          "source_url",
+          "evidence_level",
+          "oa",
+          "verification"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "notes": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "origin": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "github_actions_independent",
+            "historical_import"
+          ]
+        },
+        "model": {
+          "type": "string"
+        },
+        "reference": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "reference",
+        "model"
+      ],
+      "type": "object"
+    },
+    "period": {
+      "additionalProperties": false,
+      "properties": {
+        "end": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "start": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ],
+      "type": "object"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "search_sources": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "source_label": {
+      "enum": [
+        "原文",
+        "摘要",
+        "阶段汇总"
+      ]
+    },
+    "title": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "date",
+    "title",
+    "source_label",
+    "period",
+    "origin",
+    "generated_at",
+    "body",
+    "notes",
+    "database_status",
+    "search_sources",
+    "items"
+  ],
+  "type": "object"
+}
