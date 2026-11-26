@@ -7,7 +7,7 @@ import sys
 import tempfile
 import unittest
 from unittest.mock import patch
-from datetime import datetime
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
@@ -206,6 +206,39 @@ class ArchiveTests(unittest.TestCase):
         self.assertTrue(allowed("https://www.nsfc.gov.cn/path", ["nsfc.gov.cn"]))
         for url in ["https://nsfc.gov.cn.evil.org", "http://nsfc.gov.cn", "https://x@nsfc.gov.cn", "https://nsfc.gov.cn:8080"]:
             self.assertFalse(allowed(url, ["nsfc.gov.cn"]))
+
+    def test_llps_dedup_checks_all_historical_metadata(self):
+        today = datetime.now(ZoneInfo("Asia/Shanghai")).date()
+        yesterday = (today - timedelta(days=1)).isoformat()
+        b = brief(yesterday); save_brief(self.root, b)
+        # Reclassification must not make a previously archived LLPS DOI appear new.
+        candidate = {"kind":"paper", "doi":"10.1234/test", "title":paper()["title"],
+            "source_url":"https://example.org/source", "publication_date":today.isoformat(),
+            "evidence_quote":"", "topics":["Mechanobiology"], "keywords":[]}
+        with patch.dict(os.environ, {"OPENAI_API_KEY":"synthetic-test-key"}, clear=True), patch(
+                "generate_brief.response", side_effect=[("test research", [candidate["source_url"]]), {"candidates":[candidate]}]) as api:
+            generate(self.root)
+        self.assertEqual(api.call_count, 2)
+        self.assertEqual(load(daily_path(self.root, today.isoformat()))["items"], [])
+        self.assertEqual(load(daily_path(self.root, yesterday)), b)
+
+    def test_metadata_outage_does_not_create_today_or_change_history(self):
+        today = datetime.now(ZoneInfo("Asia/Shanghai")).date()
+        yesterday = (today - timedelta(days=1)).isoformat()
+        b = brief(yesterday); save_brief(self.root, b)
+        candidate = {"kind":"paper", "doi":"10.1234/new", "title":"New test paper",
+            "source_url":"https://example.org/source", "publication_date":today.isoformat(),
+            "evidence_quote":"", "topics":["Mechanobiology"], "keywords":[]}
+        with patch.dict(os.environ, {"OPENAI_API_KEY":"synthetic-test-key"}, clear=True), patch(
+                "generate_brief.response", side_effect=[("test research", [candidate["source_url"]]), {"candidates":[candidate]}]), patch(
+                "generate_brief.paper_evidence", side_effect=RemoteError("metadata service unavailable")):
+            with self.assertRaises(RemoteError): generate(self.root)
+        self.assertFalse(daily_path(self.root, today.isoformat()).exists())
+        self.assertEqual(load(daily_path(self.root, yesterday)), b)
+
+    def test_published_schema_matches_runtime_contract(self):
+        from archive import BRIEF_SCHEMA
+        self.assertEqual(load(ROOT / "schemas/brief.schema.json"), BRIEF_SCHEMA)
 
 
 if __name__ == "__main__":
