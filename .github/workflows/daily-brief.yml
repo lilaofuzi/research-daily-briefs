@@ -86,7 +86,7 @@ jobs:
     steps:
       - name: Deploy in this workflow
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
       - name: Verify live entry point and index
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
